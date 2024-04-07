@@ -15,7 +15,7 @@ export const databaseURL = `${type}://${username}:${password}@${host}:${port}`;
 export const dataSource = new DataSource({
   type,
 
-  url: [databaseURL, database].join('/'),
+  url: process.env.DB_URL ?? [databaseURL, database].join('/'),
   // ssl: { rejectUnauthorized: false },
 
   entities: [join(__dirname + '/../**') + '/*.entity.{js,ts}'],
