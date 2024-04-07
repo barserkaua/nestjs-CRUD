@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserEntity } from 'src/entities/user/user.entity';
-import { ParamID } from 'src/database/dto/param-id.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -27,7 +26,7 @@ export class UserController {
     type: UserEntity,
   })
   @Get(':id')
-  async findOne(@Param() { id }: ParamID): Promise<UserEntity> {
+  async findOne(@Param() { id }: { id: string }): Promise<UserEntity> {
     return this.userService.findOne(id);
   }
 
@@ -51,7 +50,7 @@ export class UserController {
   })
   @Post('update/:id')
   async update(
-    @Param() { id }: ParamID,
+    @Param() { id }: { id: string },
     @Body() body: UpdateUserDto,
   ): Promise<UserEntity> {
     return this.userService.update(id, body);
@@ -63,7 +62,7 @@ export class UserController {
     type: UserEntity,
   })
   @Delete(':id')
-  async delete(@Param() { id }: ParamID): Promise<void> {
+  async delete(@Param() { id }: { id: string }): Promise<void> {
     return this.userService.delete(id);
   }
 }
