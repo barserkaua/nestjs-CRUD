@@ -1,7 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
 import { BaseEntity } from '../base.entity';
 import { IsEmail, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { AccountActivationEntity } from './account_activation.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
@@ -17,22 +18,22 @@ export class UserEntity extends BaseEntity {
 
   @ApiProperty({ example: 'John' })
   @IsString()
-  @Column({ nullable: true })
+  @Column()
   firstName: string;
 
   @ApiProperty({ example: 'Snow' })
   @IsString()
-  @Column({ nullable: true })
+  @Column()
   lastName: string;
 
   @ApiProperty({ example: 'johnsnow@gmail.com' })
   @IsEmail()
-  @Column({ nullable: true, unique: true })
+  @Column({ unique: true })
   email: string;
 
   @ApiProperty({ example: 'JohnSnowPassword123' })
   @IsString()
-  @Column({ nullable: true })
+  @Column({ select: false, nullable: true })
   password: string;
 
   @ApiProperty({ example: 'The Wall' })
@@ -69,4 +70,9 @@ export class UserEntity extends BaseEntity {
   @IsString()
   @Column({ nullable: true })
   resetPasswordToken: string;
+
+  @OneToOne(() => AccountActivationEntity, (data) => data.user)
+  accountActivation: AccountActivationEntity;
 }
+
+export type UserEntityRelations = Pick<UserEntity, 'accountActivation'>;

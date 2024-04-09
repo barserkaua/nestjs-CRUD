@@ -18,9 +18,9 @@ export const dataSource = new DataSource({
   url: process.env.DB_URL ?? [databaseURL, database].join('/'),
   // ssl: { rejectUnauthorized: false },
 
-  entities: [join(__dirname + '/../**') + '/*.entity.{js,ts}'],
-  migrations: ['dist/migrations/*.{js,ts}'],
-  logging: true,
+  entities: [join(__dirname + '/../../**') + '/*.entity.{js,ts}'],
+  migrations: ['dist/database/migrations/*.{js,ts}'],
+  logging: false,
 
   // synchronize: process.env.NODE_ENV === 'development',
 });
