@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { uuid } from 'src/utils/ids.util';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 
@@ -15,7 +14,7 @@ export class AccountActivationEntity {
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
-  @ApiProperty({ example: uuid() })
+  @ApiProperty({ example: '2aq32c24-2d12-d43ab-bd9a-e54515366089' })
   @IsString()
   @Column()
   activationCode: string;
