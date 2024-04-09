@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { UserEntity } from 'src/entities/user/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('User')
 @Controller('user')
@@ -20,6 +20,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @ApiParam({ name: 'id', description: 'User ID' })
   @ApiOperation({ summary: 'Getting one user' })
   @ApiResponse({
     status: 200,
@@ -40,6 +41,7 @@ export class UserController {
     return this.userService.create(body);
   }
 
+  @ApiParam({ name: 'id', description: 'User ID' })
   @ApiOperation({
     summary: 'Update the user',
     description: 'Update the user by id',
@@ -56,6 +58,7 @@ export class UserController {
     return this.userService.update(id, body);
   }
 
+  @ApiParam({ name: 'id', description: 'User ID' })
   @ApiOperation({ summary: 'Delete the user' })
   @ApiResponse({
     status: 200,
