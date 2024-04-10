@@ -4,7 +4,7 @@ import { UserEntity } from 'src/entities/user/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { uuid } from 'src/utils/ids.util';
+import { uuid } from '../../utils/ids.util';
 import { AccountActivationEntity } from 'src/entities/user/account_activation.entity';
 
 @Injectable()
