@@ -22,6 +22,7 @@
     "@root/*": ["./*"],
     "@src/*": ["./src/*"],
     "@api/*": ["./src/api/*"],
-    "@entities/*": ["./src/entities/*"]
+    "@entities/*": ["./src/entities/*"],
+    "@db/*": ["./src/database/*"]
   }
 }
