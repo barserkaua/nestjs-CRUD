@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/entities/user/user.entity';
+import { UserEntity } from '../../entities/user/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { uuid } from '../../utils/ids.util';
-import { AccountActivationEntity } from 'src/entities/user/account_activation.entity';
+import { AccountActivationEntity } from '../../entities/user/account_activation.entity';
 
 @Injectable()
 export class UserService {
@@ -17,6 +17,14 @@ export class UserService {
   ) {}
 
   async create(user: CreateUserDto): Promise<UserEntity> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email: user.email },
+    });
+
+    if (existingUser) {
+      throw new ForbiddenException('User email already exists');
+    }
+
     return this.dataSource.transaction(async (manager) => {
       const newUser = await manager.save(UserEntity, user);
 
