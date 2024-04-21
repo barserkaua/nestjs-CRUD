@@ -22,9 +22,35 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Requirements
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Docker, docker-compose or MySQL
+- Nodejs v16 or latest
+
+## Run with `docker-compose`
+
+To start the project, you first need to create the backend image and pull the necessary dependencies from
+[Docker Hub](https://hub.docker.com) that are necessary for the backend to work. Run the command below to build the docker images
+
+```bash
+  docker-compose build
+```
+
+For launch project with docker-compose run below command. This command are launches 4 docker-services:
+
+- `document-api` - backend app
+- `document-db` - mysql database
+- `document-admin` - database management tool
+
+```bash
+  docker-compose up
+```
+
+To enter the docker container. After that, it is possible to enter any commands
+
+```bash
+  docker exec -it document-api bash
+```
 
 ## Installation
 
