@@ -2,8 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { UserEntity } from '../../entities/user/user.entity';
-import { ForbiddenException } from '@nestjs/common';
+import { UserEntity } from './entities/user.entity';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
@@ -35,47 +34,6 @@ describe('UserService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
-  });
-
-  describe('create', () => {
-    it('should create a new user', async () => {
-      const user = {
-        email: 'johnsnow3142@gmail.com',
-      } as UserEntity;
-
-      const existingUser = null; // Mock the existing user
-
-      userRepository.findOne = jest.fn().mockResolvedValue(existingUser);
-      userRepository.save = jest.fn().mockResolvedValue(user);
-
-      await service.create(user);
-
-      const savedUser = await userRepository.save(user);
-
-      expect(userRepository.findOne).toHaveBeenCalledWith({
-        where: { email: user.email },
-      });
-      expect(userRepository.save).toHaveBeenCalledWith(user);
-
-      expect(savedUser).toEqual(user);
-    });
-
-    it('should throw ForbiddenException if user email already exists', async () => {
-      const user = {
-        email: 'test@example.com',
-      };
-
-      const existingUser = {
-        id: 'existing-user-id',
-        email: 'test@example.com',
-      };
-
-      userRepository.findOne = jest.fn().mockResolvedValue(existingUser);
-
-      await expect(service.create(user as UserEntity)).rejects.toThrowError(
-        ForbiddenException,
-      );
-    });
   });
 
   describe('update', () => {

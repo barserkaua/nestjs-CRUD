@@ -24,7 +24,7 @@
 
 ## Requirements
 
-- Docker, docker-compose or MySQL
+- Docker, docker-compose or PostgreSQL
 - Nodejs v16 or latest
 
 ## Run with `docker-compose`
@@ -39,7 +39,7 @@ To start the project, you first need to create the backend image and pull the ne
 For launch project with docker-compose run below command. This command are launches 4 docker-services:
 
 - `document-api` - backend app
-- `document-db` - mysql database
+- `document-db` - postgre database
 - `document-admin` - database management tool
 
 ```bash
