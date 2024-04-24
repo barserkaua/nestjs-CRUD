@@ -6,7 +6,7 @@ describe('AuthGuard', () => {
   let authGuard: AuthGuard;
   let jwtService: JwtService;
   let mockReflector: any;
-  let mockContext: ExecutionContext;
+  let mockContext;
 
   beforeEach(() => {
     jwtService = new JwtService({});
@@ -17,12 +17,8 @@ describe('AuthGuard', () => {
       getHandler: jest.fn(),
       getClass: jest.fn(),
       switchToHttp: jest.fn().mockReturnThis(),
-      switchToWs: jest.fn(),
-      getType: jest.fn(),
-      getArgs: jest.fn(),
-      getArgByIndex: jest.fn(),
-      switchToRpc: jest.fn(),
-    };
+      getRequest: jest.fn(),
+    } as unknown as ExecutionContext;
     authGuard = new AuthGuard(jwtService, mockReflector);
   });
 
@@ -46,23 +42,22 @@ describe('AuthGuard', () => {
   it('should throw UnauthorizedException if no token is provided', async () => {
     const isPublic = false;
     mockReflector.getAllAndOverride.mockReturnValue(isPublic);
-    const request = mockContext.switchToHttp().getRequest();
+    mockContext.switchToHttp().getRequest = jest.fn().mockReturnValue({
+      headers: { authorization: undefined },
+    });
 
-    await expect(authGuard.canActivate(mockContext)).rejects.toThrow(
-      UnauthorizedException,
-    );
+    const result = authGuard.canActivate(mockContext);
+
+    await expect(result).rejects.toThrow(UnauthorizedException);
   });
 
   it('should throw UnauthorizedException if token verification fails', async () => {
     const isPublic = false;
     const token = 'invalid-token';
     mockReflector.getAllAndOverride.mockReturnValue(isPublic);
-    mockContext
-      .switchToHttp()
-      .getRequest()
-      .mockReturnValue({
-        headers: { authorization: `Bearer ${token}` },
-      });
+    mockContext.switchToHttp().getRequest.mockReturnValue({
+      headers: { authorization: `Bearer ${token}` },
+    });
     jwtService.verifyAsync = jest.fn().mockRejectedValueOnce(new Error());
 
     await expect(authGuard.canActivate(mockContext)).rejects.toThrow(
@@ -78,12 +73,11 @@ describe('AuthGuard', () => {
     const token = 'valid-token';
     const payload = { id: 1, username: 'testuser' };
     mockReflector.getAllAndOverride.mockReturnValue(isPublic);
-    mockContext
-      .switchToHttp()
-      .getRequest()
-      .mockReturnValue({
-        headers: { authorization: `Bearer ${token}` },
-      });
+
+    mockContext.switchToHttp().getRequest.mockReturnValue({
+      headers: { authorization: `Bearer ${token}` },
+    });
+
     jwtService.verifyAsync = jest.fn().mockResolvedValueOnce(payload);
 
     await authGuard.canActivate(mockContext);

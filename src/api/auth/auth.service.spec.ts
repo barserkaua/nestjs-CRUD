@@ -2,9 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../user/entities/user.entity';
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import { hash } from '../../utils/password.util';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -18,6 +19,12 @@ describe('AuthService', () => {
         {
           provide: getRepositoryToken(UserEntity),
           useClass: Repository,
+        },
+        {
+          provide: DataSource,
+          useValue: {
+            transaction: jest.fn(),
+          },
         },
         {
           provide: JwtService,
@@ -43,18 +50,19 @@ describe('AuthService', () => {
         password: 'hashedPassword',
       } as UserEntity;
 
-      const { password, ...restUser } = user;
+      const { email, password, id } = user;
 
       jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(user);
 
-      const expectedPayload = { sub: user.id, email: user.email };
+      const expectedPayload = { sub: id, email };
 
-      const result = await service.signIn(user.email, password);
+      const result = await service.signIn(email, password);
 
       expect(userRepository.findOneBy).toHaveBeenCalledWith({
-        email: user.email,
-        password,
+        email,
+        password: hash(password),
       });
+
       expect(jwtService.signAsync).toHaveBeenCalledWith(expectedPayload);
       expect(result).toEqual({ access_token: 'mockedToken' });
     });
@@ -70,7 +78,7 @@ describe('AuthService', () => {
       );
       expect(userRepository.findOneBy).toHaveBeenCalledWith({
         email,
-        password: 'hashedPassword',
+        password: hash(password),
       });
       expect(jwtService.signAsync).not.toHaveBeenCalled();
     });

@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../user/entities/user.entity';
@@ -53,7 +57,9 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new ForbiddenException('User matching credentials not found');
+      throw new UnauthorizedException(
+        'You entered incorrect password or email',
+      );
     }
 
     const payload = { sub: user.id, email: user.email };

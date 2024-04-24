@@ -8,13 +8,18 @@ describe('AuthController', () => {
   let controller: AuthController;
   let authService: AuthService;
 
+  const userServiceMock = {
+    signUp: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [AuthService],
+      providers: [{ provide: AuthService, useValue: userServiceMock }],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
+    authService = module.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {
