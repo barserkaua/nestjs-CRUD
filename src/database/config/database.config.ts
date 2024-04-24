@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
 import { join } from 'path';
+import { DatabaseModeEnum } from '../../constants/database.enum';
 import { DataSource } from 'typeorm';
 
 const type = 'postgres';
@@ -10,12 +11,17 @@ const database = process.env.POSTGRES_DATABASE;
 const username = process.env.POSTGRES_USER;
 const password = process.env.POSTGRES_PASSWORD;
 
-export const databaseURL = `${type}://${username}:${password}@${host}:${port}`;
+export const localDatabaseURL = `${type}://${username}:${password}@${host}:${port}`;
+
+const databaseURL =
+  process.env.MODE === DatabaseModeEnum.DEV
+    ? [localDatabaseURL, database].join('/')
+    : process.env.DB_URL;
 
 export const dataSource = new DataSource({
   type,
 
-  url: process.env.DB_URL ?? [databaseURL, database].join('/'),
+  url: databaseURL,
   // ssl: { rejectUnauthorized: false },
 
   entities: [join(__dirname + '/../../**') + '/*.entity.{js,ts}'],

@@ -3,13 +3,12 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Patch,
-  Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserEntity } from '../../entities/user/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
+import { UserEntity } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -20,7 +19,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Getting all users' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     type: [UserEntity],
   })
   @Get()
@@ -31,22 +30,12 @@ export class UserController {
   @ApiParam({ name: 'id', description: 'User ID' })
   @ApiOperation({ summary: 'Getting one user' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     type: UserEntity,
   })
   @Get(':id')
   async findOne(@Param() { id }: { id: string }): Promise<UserEntity> {
     return this.userService.findOne(id);
-  }
-
-  @ApiOperation({ summary: 'Create the user' })
-  @ApiResponse({
-    status: 200,
-    type: UserEntity,
-  })
-  @Post('create')
-  async create(@Body() body: CreateUserDto): Promise<UserEntity> {
-    return this.userService.create(body);
   }
 
   @ApiParam({ name: 'id', description: 'User ID' })
@@ -55,7 +44,7 @@ export class UserController {
     description: 'Update the user by id',
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     type: UserEntity,
   })
   @Patch('update/:id')
@@ -69,7 +58,7 @@ export class UserController {
   @ApiParam({ name: 'id', description: 'User ID' })
   @ApiOperation({ summary: 'Delete the user' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     type: UserEntity,
   })
   @Delete(':id')

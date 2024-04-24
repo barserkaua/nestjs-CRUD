@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { UserEntity } from '../../entities/user/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
+import { UserEntity } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 describe('UserController', () => {
@@ -49,22 +48,6 @@ describe('UserController', () => {
       jest.spyOn(userService, 'findOne').mockResolvedValue(user);
 
       expect(await controller.findOne({ id: userId })).toBe(user);
-    });
-  });
-
-  describe('create', () => {
-    it('should create a new user', async () => {
-      const createUserDto: CreateUserDto = {
-        email: 'johnsnow3142@gmail.com',
-      } as CreateUserDto;
-      const createdUser: UserEntity = {
-        id: '94423239-3122-46fb-8f54-ed86aa2ee0f6',
-        email: 'johnsnow3142@gmail.com',
-      } as UserEntity;
-
-      jest.spyOn(userService, 'create').mockResolvedValue(createdUser);
-
-      expect(await controller.create(createUserDto)).toBe(createdUser);
     });
   });
 

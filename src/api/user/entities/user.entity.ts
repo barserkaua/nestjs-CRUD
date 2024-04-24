@@ -1,5 +1,5 @@
 import { Column, Entity, OneToOne } from 'typeorm';
-import { BaseEntity } from '../base.entity';
+import { BaseEntity } from '../../../database/entities/base.entity';
 import { IsEmail, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { AccountActivationEntity } from './account_activation.entity';

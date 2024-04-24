@@ -23,15 +23,11 @@ export abstract class BaseEntity {
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createDateTime: Date;
 
-  @ApiProperty({ example: 'Vaider' })
-  @Column({ type: 'varchar', length: 300 })
-  createdBy: string;
-
   @ApiProperty({ example: '2024-04-07T10:05:50.484Z' })
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastChangedDateTime: Date;
 
   @ApiProperty({ example: 'Vaider' })
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ type: 'varchar', length: 300, nullable: true })
   lastChangedBy: string;
 }
