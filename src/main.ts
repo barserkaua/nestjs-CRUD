@@ -6,6 +6,16 @@ async function bootstrap() {
   const port = process.env.PORT || 4000;
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: String(process.env.ALLOWED_ORIGINS)
+      .split('|')
+      .map((e) => e.trim()),
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true,
+  });
+
   const options = new DocumentBuilder()
     .setTitle('NestJS API')
     .setVersion('0.0.1')

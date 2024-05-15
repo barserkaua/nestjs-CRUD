@@ -6,11 +6,25 @@ import {
   HttpStatus,
   Param,
   Patch,
+  Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserEntity } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+  ApiBody,
+  ApiConsumes,
+} from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express/multer';
+import { User } from 'src/decorators/user-param.decorator';
+import { ImageFileFilter } from 'src/utils/image-file-filter.util';
+import { IUserPayload } from 'src/types/user-payload.type';
 
 @ApiTags('User')
 @Controller('user')
@@ -64,5 +78,40 @@ export class UserController {
   @Delete(':id')
   async delete(@Param() { id }: { id: string }): Promise<void> {
     return this.userService.delete(id);
+  }
+
+  @ApiParam({ name: 'id', description: 'User ID' })
+  @ApiOperation({ summary: 'Upload the avatar' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserEntity,
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: ImageFileFilter,
+      limits: {
+        fileSize: 5024 * 1000, // 5MB
+        files: 1,
+      },
+    }),
+  )
+  @Post('upload-avatar/:id')
+  async uploadAvatar(
+    @User() user: IUserPayload,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<UserEntity> {
+    return this.userService.uploadAvatar(user.sub, file);
   }
 }
