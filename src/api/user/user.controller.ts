@@ -22,9 +22,9 @@ import {
   ApiConsumes,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
-import { User } from 'src/decorators/user-param.decorator';
-import { ImageFileFilter } from 'src/utils/image-file-filter.util';
-import { IUserPayload } from 'src/types/user-payload.type';
+import { User } from '../../decorators/user-param.decorator';
+import { ImageFileFilter } from '../../utils/image-file-filter.util';
+import { IUserPayload } from '../../types/user-payload.type';
 
 @ApiTags('User')
 @Controller('user')

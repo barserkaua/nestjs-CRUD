@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { shortID } from 'src/utils/ids.util';
+import { shortID } from '../../utils/ids.util';
 import { extname } from 'path';
-import { S3Service } from 'src/database/services/s3.service';
+import { S3Service } from '../../database/services/s3.service';
 
 @Injectable()
 export class UserService {

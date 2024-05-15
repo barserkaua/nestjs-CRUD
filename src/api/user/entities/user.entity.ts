@@ -3,7 +3,7 @@ import { BaseEntity } from '../../../database/entities/base.entity';
 import { IsEmail, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { AccountActivationEntity } from './account_activation.entity';
-import { shortID } from 'src/utils/ids.util';
+import { shortID } from '../../../utils/ids.util';
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {

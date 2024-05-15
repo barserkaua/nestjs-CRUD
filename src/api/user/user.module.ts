@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '../../guards/auth/auth.guard';
-import { S3Module } from 'src/database/services/s3.module';
+import { S3Module } from '../../database/services/s3.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity]), S3Module],
