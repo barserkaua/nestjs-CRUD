@@ -3,6 +3,7 @@ import { BaseEntity } from '../../../database/entities/base.entity';
 import { IsEmail, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { AccountActivationEntity } from './account_activation.entity';
+import { shortID } from '../../../utils/ids.util';
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
@@ -61,7 +62,7 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   phone: string;
 
-  @ApiProperty({ example: 'image/example.png' })
+  @ApiProperty({ example: `${process.env.S3_URL}/${shortID()}.png` })
   @IsString()
   @Column({ nullable: true })
   avatar: string;
