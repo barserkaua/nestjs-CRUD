@@ -80,7 +80,6 @@ export class UserController {
     return this.userService.delete(id);
   }
 
-  @ApiParam({ name: 'id', description: 'User ID' })
   @ApiOperation({ summary: 'Upload the avatar' })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -107,7 +106,7 @@ export class UserController {
       },
     }),
   )
-  @Post('upload-avatar/:id')
+  @Patch('upload-avatar/:id')
   async uploadAvatar(
     @User() user: IUserPayload,
     @UploadedFile() file: Express.Multer.File,
